@@ -162,12 +162,11 @@ class OrderObserver
 
             Notification::send($order->customer, new NewOrder($customer_notification));
 
-          $res =  Fcm::sendToTokens(
-                tokens: [$order->customer->notifiable->token],
-                title: $order->provider?->name ?? env('APP_NAME'),
-                message: $customer_notification['body']
+            Fcm::sendToTokens(
+                [$order->customer->notifiable->token],
+                $order->provider?->name ?? env('APP_NAME'),
+                $customer_notification['body']
             );
-            dd($res);
 
             SendNotificationToSystem::send($adminNotification);
         }
