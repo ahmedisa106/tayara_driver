@@ -20,7 +20,7 @@ class OrderController extends Controller
                 if ($request->type == 'current') {
                     $query->where(function ($query) {
                         $query->whereNot('status', OrderStatus::Cancelled->value)
-                            ->orWhereNot('status', OrderStatus::Complete->value);
+                            ->whereNot('status', OrderStatus::Complete->value);
                     });
                 } elseif ($request->type == "list") {
                     $query->where(function ($query) {
