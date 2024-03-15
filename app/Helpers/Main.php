@@ -25,4 +25,15 @@ if (!function_exists('getPaginationInfo')) {
             'to' => $model->lastItem(),
         ];
     }
+
+    if (!function_exists('system_url')) {
+        function system_url()
+        {
+            if (app()->isLocal()) {
+                return "http://localhost:8000";
+            }
+
+            return "https://www.tayara-app.com";
+        }
+    }
 }

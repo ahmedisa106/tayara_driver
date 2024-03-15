@@ -51,10 +51,10 @@ class OrderObserver
     public function updated(Order $order): void
     {
         $icon = @$order->provider
-            ? env('SYSTEM_URL') . '/storage/uploads/' . $order->provider->image
-            : env('SYSTEM_URL') . '/' . $this->defaultImagePath;
+            ? system_url() . '/storage/uploads/' . $order->provider->image
+            : system_url() . '/' . $this->defaultImagePath;
 
-            dd($icon,env('SYSTEM_URL'));
+            dd($icon,system_url());
 
         // when order completed
         if (
