@@ -35,7 +35,6 @@ class OrderObserver
             $order->driver_ratio  = $driver_salary;
             $order->provider_ratio = $provider_salary;
             $order->net_price  = ($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);
-
         }
 
         if (
@@ -47,7 +46,6 @@ class OrderObserver
             $order->provider_ratio = 0;
             $order->net_price  = 0;
         }
-
     }
 
     public function updated(Order $order): void
@@ -115,6 +113,22 @@ class OrderObserver
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
+
+            // SEND NOTIFICATIONS TO CUSTOMER
+            $customer_notification = [
+                'title' => $order->provider?->name ?? env('APP_NAME'),
+                'body' => "طلبكم قيد التنفيذ",
+                'icon' => $icon,
+                'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
+                'order_id' => $order->id
+            ];
+
+            Fcm::sendToTokens(
+                tokens: [$order->customer->notifiable->token],
+                title: $order->provider?->name ?? env('APP_NAME'),
+                message: $customer_notification['body']
+            );
+
 
             SendNotificationToSystem::send($adminNotification);
         }
