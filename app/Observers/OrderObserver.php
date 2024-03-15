@@ -117,7 +117,7 @@ class OrderObserver
             // SEND NOTIFICATIONS TO CUSTOMER
             $customer_notification = [
                 'title' => $order->provider?->name ?? env('APP_NAME'),
-                'body' => "طلبكم قيد التنفيذ",
+                'body' => "جاري توصيل طلبكم",
                 'icon' => $icon,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
                 'order_id' => $order->id
