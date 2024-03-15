@@ -11,8 +11,6 @@ class SendNotificationToSystem
 {
     public static function send(?array $data = null)
     {
-        $data = $data + ['url' => config('tayara.local') . '/dashboard/orders/' . $data['order_code']];
-
         Http::post(config('tayara.local') . '/sendNotification', $data);
     }
 }
