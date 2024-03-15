@@ -15,17 +15,46 @@ class OrderObserver
     protected string $defaultImagePath = "defaults/new_message_2.png";
 
 
-    public function updating(Order $order){
+    public function updating(Order $order)
+    {
+        if (
+            $order->getOriginal('status')->value != $order->status->value
+            &&
+            $order->status->value == OrderStatus::Complete->value
+        ) {
 
+            $driver_ratio = auth()->user()->contract_ratio;
+
+            $driver_salary = ($driver_ratio / 100) * $order->delivery_fee;
+
+            $provider_ratio = $order->provider?->contract_ratio;
+
+            $provider_salary = $order->subtotal -  (($provider_ratio / 100) * $order->subtotal);
+
+
+            $order->driver_ratio  = $driver_salary;
+            $order->provider_ratio = $provider_salary;
+            $order->net_price  = ($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);
+
+        }
+
+        if (
+            $order->getOriginal('status')->value != $order->status->value
+            &&
+            $order->status->value == OrderStatus::Cancelled->value
+        ) {
+            $order->driver_ratio  = 0;
+            $order->provider_ratio = 0;
+            $order->net_price  = 0;
+        }
 
     }
 
     public function updated(Order $order): void
     {
-
         $icon = @$order->provider
-        ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
-        : config('tayara.local').'/'. $this->defaultImagePath;
+            ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
+            : config('tayara.local') . '/' . $this->defaultImagePath;
 
         // when order completed
         if (
@@ -45,20 +74,6 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            $driver_ratio = auth()->user()->contract_ratio;
-
-            $driver_salary = ($driver_ratio / 100) * $order->delivery_fee;
-
-            $provider_ratio = $order->provider?->contract_ratio;
-
-            $provider_salary = $order->subtotal -  (($provider_ratio / 100) * $order->subtotal);
-
-
-            $order->driver_ratio  =$driver_salary ;
-            $order->provider_ratio = $provider_salary;
-            $order->net_price  =($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);
-
-
             SendNotificationToSystem::send($adminNotification);
         }
 
@@ -67,8 +82,7 @@ class OrderObserver
             $order->getOriginal('status')->value != $order->status->value
             &&
             $order->status->value == OrderStatus::Cancelled->value
-        )
-        {
+        ) {
             $adminNotification =  [
                 'title' => "رسالة من " . auth()->user()->name,
                 'body' => "تم إلغاء الطلب رقم " . $order->order_code,
@@ -81,18 +95,8 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            $order->driver_ratio  =0 ;
-            $order->provider_ratio =0;
-            $order->net_price  =0;
-
             SendNotificationToSystem::send($adminNotification);
         }
-
-
-
-        $icon = @$order->provider
-            ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
-            : config('tayara.local').'/'.$this->defaultImagePath;
 
         // when order Attached
         if (
