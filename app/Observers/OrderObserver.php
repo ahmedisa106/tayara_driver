@@ -54,7 +54,7 @@ class OrderObserver
             ? env('SYSTEM_URL') . '/storage/uploads/' . $order->provider->image
             : env('SYSTEM_URL') . '/' . $this->defaultImagePath;
 
-            dd($icon);
+            dd($icon,env('SYSTEM_URL'));
 
         // when order completed
         if (
