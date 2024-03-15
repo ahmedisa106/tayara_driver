@@ -54,6 +54,8 @@ class OrderObserver
             ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
             : config('tayara.local') . '/' . $this->defaultImagePath;
 
+            dd($icon);
+
         // when order completed
         if (
             $order->getOriginal('status')->value != $order->status->value
