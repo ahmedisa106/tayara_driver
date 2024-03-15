@@ -16,6 +16,13 @@ class OrderObserver
 
 
     public function updating(Order $order){
+
+
+    }
+
+    public function updated(Order $order): void
+    {
+
         $icon = @$order->provider
         ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
         : config('tayara.local').'/'. $this->defaultImagePath;
@@ -81,10 +88,8 @@ class OrderObserver
             SendNotificationToSystem::send($adminNotification);
         }
 
-    }
 
-    public function updated(Order $order): void
-    {
+
         $icon = @$order->provider
             ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
             : config('tayara.local').'/'.$this->defaultImagePath;
