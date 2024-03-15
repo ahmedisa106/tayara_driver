@@ -11,6 +11,6 @@ class SendNotificationToSystem
 {
     public static function send(?array $data = null)
     {
-        Http::post(config('tayara.local') . '/sendNotification', $data);
+        Http::post(system_url() . '/sendNotification', $data);
     }
 }
