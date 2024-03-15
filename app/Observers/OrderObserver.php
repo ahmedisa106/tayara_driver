@@ -33,7 +33,7 @@ class OrderObserver
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => config('tayara.local', 'tayara.production') . '/dashboard/orders/' . $order->order_code
+                'url' => config('tayara.local') . '/dashboard/orders/' . $order->order_code
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -69,7 +69,7 @@ class OrderObserver
                 'order_code' => $order->order_code,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => config('tayara.local', 'tayara.production') . '/dashboard/orders/' . $order->order_code
+                'url' => config('tayara.local') . '/dashboard/orders/' . $order->order_code
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -124,7 +124,7 @@ class OrderObserver
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => config('tayara.local', 'tayara.production') . '/dashboard/orders/' . $order->order_code
+                'url' => config('tayara.local') . '/dashboard/orders/' . $order->order_code
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));

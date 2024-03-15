@@ -63,7 +63,7 @@ class OrderController extends Controller
         $order->update(['driver_attached_order' => true]);
 
         if ($order->provider_id == null) {
-            $order->update(['status' => OrderStatus::In_progress]);
+            $order->update(['status' => OrderStatus::In_progress->value]);
         }
 
         return $this->final_response(message: "تم إستلام الطلب بنجاح",);
@@ -79,14 +79,14 @@ class OrderController extends Controller
 
     public function cancel(Order $order)
     {
-        $order->update(['status' => OrderStatus::Cancelled]);
+        $order->update(['status' => OrderStatus::Cancelled->value]);
 
         return $this->final_response(message: "تم إلغاء الطلب بنجاح",);
     }
 
     public function complete(Order $order)
     {
-        $order->update(['status' => OrderStatus::Complete]);
+        $order->update(['status' => OrderStatus::Complete->value]);
 
         return $this->final_response(message: "تم إكمال الطلب بنجاح",);
     }
