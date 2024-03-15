@@ -51,8 +51,8 @@ class OrderObserver
     public function updated(Order $order): void
     {
         $icon = @$order->provider
-            ? config('tayara.local') . '/storage/uploads/' . $order->provider->image
-            : config('tayara.local') . '/' . $this->defaultImagePath;
+            ? env('SYSTEM_URL') . '/storage/uploads/' . $order->provider->image
+            : env('SYSTEM_URL') . '/' . $this->defaultImagePath;
 
             dd($icon);
 
