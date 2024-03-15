@@ -114,22 +114,6 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            // SEND NOTIFICATIONS TO CUSTOMER
-            $customer_notification = [
-                'title' => $order->provider?->name ?? env('APP_NAME'),
-                'body' => "جاري توصيل طلبكم",
-                'icon' => $icon,
-                'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'order_id' => $order->id
-            ];
-
-            Fcm::sendToTokens(
-                tokens: [$order->customer->notifiable->token],
-                title: $order->provider?->name ?? env('APP_NAME'),
-                message: $customer_notification['body']
-            );
-
-
             SendNotificationToSystem::send($adminNotification);
         }
 
@@ -162,13 +146,13 @@ class OrderObserver
 
             Notification::send($order->customer, new NewOrder($customer_notification));
 
-            SendNotificationToSystem::send($adminNotification);
-
             Fcm::sendToTokens(
                 tokens: [$order->customer->notifiable->token],
                 title: $order->provider?->name ?? env('APP_NAME'),
                 message: $customer_notification['body']
             );
+
+            SendNotificationToSystem::send($adminNotification);
         }
     }
 }
