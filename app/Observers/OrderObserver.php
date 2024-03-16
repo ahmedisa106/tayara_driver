@@ -94,7 +94,7 @@ class OrderObserver
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
             $customer_notification = [
-                'title' => $order->provider?->name ?? env('APP_NAME'),
+                'title' => $order->provider?->name ?? config('app.name'),
                 'body' => "تم إلغاء الطلب",
                 'icon' => $icon,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
@@ -105,7 +105,7 @@ class OrderObserver
 
             Fcm::sendToTokens(
                 tokens: [$order->customer->notifiable->token],
-                title: $order->provider?->name ?? env('APP_NAME'),
+                title: $order->provider?->name ?? config('app.name'),
                 message: $customer_notification['body']
             );
 
@@ -153,7 +153,7 @@ class OrderObserver
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
             $customer_notification = [
-                'title' => $order->provider?->name ?? env('APP_NAME'),
+                'title' => $order->provider?->name ?? config('app.name'),
                 'body' => "جاري توصيل طلبكم",
                 'icon' => $icon,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
@@ -164,7 +164,7 @@ class OrderObserver
 
             Fcm::sendToTokens(
                 [$order->customer->notifiable->token],
-                $order->provider?->name ?? env('APP_NAME'),
+                $order->provider?->name ?? config('app.name'),
                 $customer_notification['body']
             );
 
