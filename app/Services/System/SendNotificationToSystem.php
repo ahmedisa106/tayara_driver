@@ -11,6 +11,6 @@ class SendNotificationToSystem
 {
     public static function send(?array $data = null)
     {
-        Http::post(system_url() . '/sendNotification', $data);
+        Http::post(system_url('sendNotification'), $data);
     }
 }

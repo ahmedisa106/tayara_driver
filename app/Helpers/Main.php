@@ -3,7 +3,7 @@
 if (!function_exists('getFile')) {
     function getFile($path = null)
     {
-        return app()->isLocal() ? config('tayara.local', 'tayara.production') . '/storage/uploads/' . $path : "";
+        return system_url('storage/uploads/' . $path);
     }
 }
 
@@ -13,6 +13,7 @@ if (!function_exists('getPaginationInfo')) {
         if (!is_object($model)) {
             return false;
         }
+
         return [
             'total' => $model->total(),
             'per_page' => $model->perPage(),
@@ -27,13 +28,13 @@ if (!function_exists('getPaginationInfo')) {
     }
 
     if (!function_exists('system_url')) {
-        function system_url()
+        function system_url(?string $url = null)
         {
             if (app()->isLocal()) {
-                return "http://localhost:8000";
-            }
+                return "http://www.localhost:8000/" . $url;
+            }           
 
-            return "https://www.tayara-app.com";
+            return "https://www.tayara-app.com/" . $url;
         }
     }
 }

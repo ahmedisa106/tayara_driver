@@ -3,8 +3,10 @@
 namespace App\Observers;
 
 use App\Enums\OrderStatus;
-use App\Models\Admin;
-use App\Models\Order;
+use App\Models\{
+    Admin,
+    Order,
+};
 use App\Notifications\NewOrder;
 use App\Services\Fcm\Fcm;
 use App\Services\System\SendNotificationToSystem;
@@ -51,8 +53,8 @@ class OrderObserver
     public function updated(Order $order): void
     {
         $icon = @$order->provider
-            ? system_url() . '/storage/uploads/' . $order->provider->image
-            : system_url() . '/' . $this->defaultImagePath;
+            ? system_url('storage/uploads/' . $order->provider->image)
+            : system_url($this->defaultImagePath);
 
         // when order completed
         if (
@@ -67,7 +69,7 @@ class OrderObserver
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url() . '/dashboard/orders/' . $order->order_code
+                'url' => system_url('dashboard/orders/' . $order->order_code)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -88,7 +90,7 @@ class OrderObserver
                 'order_code' => $order->order_code,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url() . '/dashboard/orders/' . $order->order_code
+                'url' => system_url('dashboard/orders/' . $order->order_code)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -125,7 +127,7 @@ class OrderObserver
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url() . '/dashboard/orders/' . $order->order_code
+                'url' => system_url('dashboard/orders/' . $order->order_code)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -147,7 +149,7 @@ class OrderObserver
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url() . '/dashboard/orders/' . $order->order_code
+                'url' => system_url('dashboard/orders/' . $order->order_code)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
