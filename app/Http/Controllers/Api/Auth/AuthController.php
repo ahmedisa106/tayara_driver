@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DriverResource;
-use App\Models\User;
+use App\Models\Driver;
 use App\Traits\response;
 use Illuminate\Http\Request;
 
@@ -21,20 +21,29 @@ class AuthController extends Controller
     {
         if (!auth()->attempt($request->only(['phone', 'password']))) {
             return $this->final_response(
-                success:false,
+                success: false,
                 message: "خطأ في البيانات برجاء المحاولة مري أخري",
                 code: 404
             );
         }
 
+        auth()->user()->notifiable()->updateOrCreate(
+            [
+                'notifiable_type' => Driver::class,
+                'notifiable_id' => auth()->id(),
+            ],
+            [
+                'token' => $request->header('fcm-token')
+            ]
+        );
+
         return $this->final_response(
-            message: "تم تسجيل الدخول بنجاح",
+            message: __('messages.success'),
             data: [
                 'user' => new DriverResource(auth('sanctum')->user()),
                 'token' => auth()->user()->createToken($request->phone)->plainTextToken
             ]
         );
-
     }
 
     public function logout(User $user)

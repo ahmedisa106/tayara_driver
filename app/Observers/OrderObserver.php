@@ -33,7 +33,6 @@ class OrderObserver
 
             $provider_salary = $order->subtotal -  (($provider_ratio / 100) * $order->subtotal);
 
-
             $order->driver_ratio  = $driver_salary;
             $order->provider_ratio = $provider_salary;
             $order->net_price  = ($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);

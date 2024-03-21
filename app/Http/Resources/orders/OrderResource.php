@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\orders;
 
-use App\Models\Customer;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\BranchResource;
+use App\Http\Resources\CustomerResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,14 +19,12 @@ class OrderResource extends JsonResource
     {
         return [
             'id'             => $this->id,
-            'products_count' => $this->products_count,
+            'order_code'=>$this->order_code,
+            'provider_id'    => $this->provider_id,
             'subtotal'       => $this->subtotal,
-            'delivery_fee'   => $this->delivery_fee,
-            'total'          => $this->total,
             'status'         => $this->status->toString(),
-            'customer'       => new CustomerResource($this->customer),
-            'address'        => new AddressResource($this->address),
-            'branch'         => new BranchResource($this->branch),
+            'details'=>$this->note,
+            'created_at' => $this->created_at->format('Y-m-d H:i A'),
         ];
     }
 }

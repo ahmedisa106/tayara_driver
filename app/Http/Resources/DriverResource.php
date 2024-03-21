@@ -15,10 +15,11 @@ class DriverResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'name'=>$this->name,
-            'phone'=>$this->phone,
-            'has_shift'=>(bool)$this->currentShift()
+            'id'                         => $this->id,
+            'name'                       => $this->name,
+            'phone'                      => $this->phone,
+            'unread_notifications_count' => auth()->user()->unreadNotifications()->count(),
+            'has_shift'                  => (bool)$this->currentShift()
         ];
     }
 }

@@ -32,7 +32,7 @@ if (!function_exists('getPaginationInfo')) {
         {
             if (app()->isLocal()) {
                 return "http://www.localhost:8000/" . $url;
-            }           
+            }
 
             return "https://www.tayara-app.com/" . $url;
         }

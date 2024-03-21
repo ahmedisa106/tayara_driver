@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Driver extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -47,15 +49,25 @@ class User extends Authenticatable
         return $this->hasMany(Shift::class, 'driver_id');
     }
 
-    public function currentShift()
+    public function currentShift(): HasOne
     {
-        return $this->hasOne(Shift::class, 'driver_id')->whereNull('end_at')->latest()->first();
+        return $this->hasOne(Shift::class, 'driver_id')
+            ->whereNull('end_at')
+            ->latest();
     }
 
     public function orders()
     {
         return $this->hasMany(Order::class, 'driver_id')
-            ->where('shift_id', auth()->user()->currentShift()?->id)
+            ->where('shift_id', auth()->user()->currentShift()->first()?->id)
             ->whereNotNull('shift_id');
     }
+
+    /**
+     * @return MorphOne
+     */
+    public function notifiable(): MorphOne
+    {
+        return $this->MorphOne(FcmToken::class, 'notifiable');
+    } // end of model function
 }

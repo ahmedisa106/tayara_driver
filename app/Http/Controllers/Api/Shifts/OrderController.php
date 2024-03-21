@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Shifts;
 
 use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\OrderResource;
+use App\Http\Resources\orders\OrderResource;
+use App\Http\Resources\orders\ShowResource;
 use App\Models\Order;
 use App\Traits\response;
 use Illuminate\Http\Request;
@@ -29,7 +30,25 @@ class OrderController extends Controller
                     });
                 }
             })
-            ->with([
+            ->select([
+                'id',
+                'subtotal',
+                'order_code',
+                'note',
+                'status',
+                'created_at',
+            ])
+            ->latest()
+            ->withCount('products')
+            ->paginate();
+
+        return $this->success($orders, OrderResource::class);
+    }
+
+    public function show(Order $order)
+    {
+        $order->load(
+            [   'products:id',
                 'customer:id,name,phone,second_phone',
                 'address:id,address,bookmark,lat,long,city_id' => [
                     'city:id,name'
@@ -37,25 +56,10 @@ class OrderController extends Controller
                 'branch:id,provider_id,name,address' => [
                     'provider:id,name,image'
                 ]
-            ])
-            ->select([
-                'id',
-                'customer_id',
-                'provider_id',
-                'address_id',
-                'branch_id',
-                'subtotal',
-                'delivery_fee',
-                'total',
-                'order_code',
-                'note',
-                'status'
-            ])
-            ->latest()
-            ->withCount('products')
-            ->paginate();
+            ]
+        )->loadCount('products as products_count');
 
-        return $this->success($orders, OrderResource::class);
+        return $this->final_response(data: new ShowResource($order));
     }
 
     public function attach(Order $order)
