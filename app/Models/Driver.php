@@ -59,7 +59,7 @@ class Driver extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class, 'driver_id')
-            ->where('shift_id', auth()->user()->currentShift()->first()?->id)
+            ->where('shift_id', auth()->user()->currentShift()?->first()?->id)
             ->whereNotNull('shift_id');
     }
 

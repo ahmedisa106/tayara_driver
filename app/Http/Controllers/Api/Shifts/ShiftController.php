@@ -55,7 +55,7 @@ class ShiftController extends Controller
 
     public function store(Request $request)
     {
-        abort_unless(!auth('sanctum')->user()->currentShift()->first(), 400, 'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
+        abort_unless(!auth('sanctum')->user()->currentShift()?->first(), 400, 'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
 
         $shift = auth('sanctum')->user()->shifts()->create([
             'start_at' => now()
@@ -67,12 +67,15 @@ class ShiftController extends Controller
         );
     }
 
-    public function endShift(Shift $shift)
+    public function endShift()
     {
+        $shift = auth()->user()->currentShift()?->first();
 
-        abort_unless(!$shift->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
+        abort_unless(!$shift?->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
 
-        $shift->update(['end_at' => now()]);
+        if($shift){
+            $shift->update(['end_at' => now()]);
+        }
 
         return $this->final_response(
             message: "تم إنهاء الوردية بنجاح"

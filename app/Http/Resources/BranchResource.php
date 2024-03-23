@@ -18,7 +18,9 @@ class BranchResource extends JsonResource
             'id'             => $this->id,
             'name'           => $this->name,
             'address'        => $this->address,
-            'provider'       => $this->provider?->name,
+            'provider_name'       => $this->provider?->name,
+            'lat'=>$this->lat,
+            'long'=>$this->long,
             'provider_image' => $this->provider ? getFile($this->provider->image) : null,
         ];
     }

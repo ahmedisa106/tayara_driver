@@ -46,7 +46,7 @@ class AuthController extends Controller
         );
     }
 
-    public function logout(User $user)
+    public function logout(Driver $driver)
     {
         auth('sanctum')->user()->currentAccessToken()->delete();
 

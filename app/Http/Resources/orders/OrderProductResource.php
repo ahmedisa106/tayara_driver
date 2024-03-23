@@ -15,23 +15,26 @@ class OrderProductResource extends JsonResource
     public function toArray(Request $request): array
     {
         $options = [];
+
         if ($this->pivot->option_values) {
             foreach (json_decode($this->pivot->option_values, true) as $option) {
                 $options[] = /*$option['option_text'] . ' : ' .*/
                     $option['option_value_text'];
             }
+
             $options = implode(' + ', $options);
         }
 
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => getFile($this->image),
+
             'price' => (double)$this->pivot->price,
             'currency' => config('app.currency'),
             'quantity' => $this->pivot->quantity,
             'options' => $options,
-            'note' => $this->pivot->note
+            'note' => $this->pivot->note,
+            'image' => $this->image ? getFile($this->image)  :null,
         ];
     }
 }

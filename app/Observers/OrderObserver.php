@@ -16,7 +16,6 @@ class OrderObserver
 {
     protected string $defaultImagePath = "defaults/new_message_2.png";
 
-
     public function updating(Order $order)
     {
         if (

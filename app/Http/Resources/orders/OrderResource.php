@@ -20,11 +20,13 @@ class OrderResource extends JsonResource
         return [
             'id'             => $this->id,
             'order_code'=>$this->order_code,
-            'provider_id'    => $this->provider_id,
+            'products_count'=>$this->products_count??0,
             'subtotal'       => $this->subtotal,
             'status'         => $this->status->toString(),
-            'details'=>$this->note,
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
+            'provider_id'    => $this->provider_id,
+            'provider_name'    => $this->provider?->name ?? null,
+            'provider_image'    => $this->provider?  getFile($this->provider->image) : null,
         ];
     }
 }
