@@ -93,7 +93,8 @@ class ShiftController extends Controller
         $shift = auth()->user()->shifts()
             ->whereNotNull('end_at')
             ->latest()
-            ->first()?->load('orders')->loadCount('orders');
+            ->first()?->load('orders')
+            ->loadCount('orders');
 
         return $this->final_response(data: new ShiftResource($shift));
 
