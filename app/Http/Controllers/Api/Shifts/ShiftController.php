@@ -96,6 +96,13 @@ class ShiftController extends Controller
             ->first()?->load('orders')
             ->loadCount('orders');
 
+        if ($shift->doesntExist()) {
+            return $this->final_response(
+                success: false,
+                message: "لا يوجد اي ورديات متااحة الأن",
+                code: 404
+            );
+        }
         return $this->final_response(data: new ShiftResource($shift));
 
     }

@@ -21,7 +21,7 @@ class ShiftResource extends JsonResource
             'end_at' => $this->end_at?->isoFormat('dddd LL hh:mm A'),
             'total' => (double)$this->orders_sum_driver_ratio ?? 0,
             'total_orders' => (int)$this->orders_count,
-            'orders' => $this->whenLoaded('orders', OrderResource::collection($this->orders)),
+            'orders' => $this->whenLoaded('orders', fn() => OrderResource::collection($this->orders)),
         ];
     }
 }
