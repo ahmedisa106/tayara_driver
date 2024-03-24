@@ -95,6 +95,9 @@ class ShiftController extends Controller
             ->whereNotNull('end_at')
             ->latest()
             ->first()?->load('orders')
+            ->loadSum(['orders' => function (Builder $builder) {
+                $builder->where('status', OrderStatus::Complete);
+            }], 'driver_ratio')
             ->loadCount('orders');
 
         if ($shift->doesntExist()) {
