@@ -33,6 +33,11 @@ class ShiftController extends Controller
         );
     }
 
+    public function show()
+    {
+        dd('show');
+    }
+
     public function current()
     {
         $shift = auth()->user()->currentShift()
@@ -73,12 +78,23 @@ class ShiftController extends Controller
 
         abort_unless(!$shift?->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
 
-        if($shift){
+        if ($shift) {
             $shift->update(['end_at' => now()]);
         }
 
         return $this->final_response(
             message: "تم إنهاء الوردية بنجاح"
         );
+    }
+
+    public function latest()
+    {
+        $shift = auth()->user()->shifts()
+            ->whereNotNull('end_at')
+            ->latest()
+            ->first()?->load('orders')->loadCount('orders');
+
+        return $this->final_response(data: new ShiftResource($shift));
+
     }
 }

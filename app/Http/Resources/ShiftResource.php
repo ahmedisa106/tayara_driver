@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\orders\OrderResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,6 +21,7 @@ class ShiftResource extends JsonResource
             'end_at' => $this->end_at?->isoFormat('dddd LL hh:mm A'),
             'total' => $this->orders_sum_driver_ratio ?? 0,
             'total_orders' => $this->orders_count,
+            'orders' => OrderResource::collection($this->orders)
         ];
     }
 }

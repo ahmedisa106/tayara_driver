@@ -27,9 +27,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('delete', [AuthController::class, 'deleteAccount']);
 
     //shifts
-    Route::apiResource('shifts',ShiftController::class)->except(['delete','show']);
+
+    Route::get('shifts/latest',[ShiftController::class,'latest']);
     Route::get('shifts/current', [ShiftController::class,'current']);
     Route::patch('shifts',[ShiftController::class,'endShift']);
+    Route::apiResource('shifts',ShiftController::class)->except(['delete']);
 
     //orders
     Route::apiResource('orders',OrderController::class)->only(['index','show']);
