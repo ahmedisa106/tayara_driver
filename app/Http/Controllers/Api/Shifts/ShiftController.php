@@ -25,6 +25,7 @@ class ShiftController extends Controller
             ->withCount(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
             }])
+            ->latest()
             ->paginate(request()->limit);
 
         return $this->success(
