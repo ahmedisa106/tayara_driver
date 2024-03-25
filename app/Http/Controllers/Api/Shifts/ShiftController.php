@@ -8,13 +8,19 @@ use App\Http\Resources\ShiftResource;
 use App\Models\Shift;
 use App\Traits\response;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ShiftController extends Controller
 {
     use response;
 
-    public function index()
+    /**
+     * Display all shifts with orders in desc
+     *
+     * @return JsonResponse
+     */
+    public function index(): JsonResponse
     {
         $shifts = Shift::whereBelongsTo(auth()->user())
             ->select('id', 'start_at', 'end_at')
@@ -28,18 +34,31 @@ class ShiftController extends Controller
             ->latest()
             ->paginate(request()->limit);
 
-        return $this->success(
-            $shifts,
-            ShiftResource::class
-        );
+        return $this->success($shifts, ShiftResource::class);
     }
 
-    public function show()
+    /**
+     * Display Shift
+     *
+     * @return JsonResponse
+     */
+    public function show(Shift $shift): JsonResponse
     {
-        dd('show');
+        $shift->load('orders')
+            ->loadCount('orders')
+            ->loadSum(['orders' => function (Builder $builder) {
+                $builder->where('status', OrderStatus::Complete);
+            }], 'driver_ratio');
+
+        return $this->final_response(data: new ShiftResource($shift));
     }
 
-    public function current()
+    /**
+     * Display Current Shift
+     *
+     * @return JsonResponse
+     */
+    public function current(): JsonResponse
     {
         $shift = auth()->user()->currentShift()
             ->withSum(['orders' => function ($q) {
@@ -48,33 +67,37 @@ class ShiftController extends Controller
             ->withCount('orders as orders_count');
 
         if ($shift->doesntExist()) {
-            return $this->final_response(
-                success: false,
-                message: "لا يوجد اي ورديات متااحة الأن",
-                code: 404
-            );
+            return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
         }
 
-        return $this->final_response(
-            data: new ShiftResource($shift->first())
-        );
+        return $this->final_response(data: new ShiftResource($shift->first()));
     }
 
-    public function store(Request $request)
+    /**
+     * Start new Shift
+     *
+     * @return JsonResponse
+     */
+    public function store(): JsonResponse
     {
-        abort_unless(!auth('sanctum')->user()->currentShift()?->first(), 400, 'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
+        abort_unless(
+            !auth('sanctum')->user()->currentShift()?->first(),
+            400,
+            'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
 
         $shift = auth('sanctum')->user()->shifts()->create([
             'start_at' => now()
         ]);
 
-        return $this->final_response(
-            message: "تم بدأ الوردية بنجاح",
-            data: new ShiftResource($shift)
-        );
+        return $this->final_response(message: "تم بدأ الوردية بنجاح", data: new ShiftResource($shift));
     }
 
-    public function endShift()
+    /**
+     * End driver's latest shift
+     *
+     * @return JsonResponse
+     */
+    public function endShift(): JsonResponse
     {
         $shift = auth()->user()->currentShift()?->first();
 
@@ -84,30 +107,29 @@ class ShiftController extends Controller
             $shift->update(['end_at' => now()]);
         }
 
-        return $this->final_response(
-            message: "تم إنهاء الوردية بنجاح"
-        );
+        return $this->final_response(message: "تم إنهاء الوردية بنجاح");
     }
 
-    public function latest()
+    /**
+     * Display the latest shift with orders details
+     *
+     * @return JsonResponse
+     */
+    public function latest(): JsonResponse
     {
         $shift = auth()->user()->shifts()
             ->whereNotNull('end_at')
             ->latest()
             ->first()?->load('orders')
+            ->loadCount('orders')
             ->loadSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
-            }], 'driver_ratio')
-            ->loadCount('orders');
+            }], 'driver_ratio');
 
         if ($shift->doesntExist()) {
-            return $this->final_response(
-                success: false,
-                message: "لا يوجد اي ورديات متااحة الأن",
-                code: 404
-            );
+            return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
         }
-        return $this->final_response(data: new ShiftResource($shift));
 
+        return $this->final_response(data: new ShiftResource($shift));
     }
 }
