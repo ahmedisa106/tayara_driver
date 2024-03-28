@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\Profile\ProfileController;
 use App\Http\Controllers\Api\Shifts\ShiftController;
 use App\Http\Controllers\Api\Shifts\OrderController;
 use Illuminate\Support\Facades\Route;
@@ -27,22 +28,23 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('delete', [AuthController::class, 'deleteAccount']);
 
     //shifts
-
-    Route::get('shifts/latest',[ShiftController::class,'latest']);
-    Route::get('shifts/current', [ShiftController::class,'current']);
-    Route::patch('shifts',[ShiftController::class,'endShift']);
-    Route::apiResource('shifts',ShiftController::class)->except(['delete']);
+    Route::get('shifts/latest', [ShiftController::class, 'latest']);
+    Route::get('shifts/current', [ShiftController::class, 'current']);
+    Route::patch('shifts', [ShiftController::class, 'endShift']);
+    Route::apiResource('shifts', ShiftController::class)->except(['delete']);
 
     //orders
-    Route::apiResource('orders',OrderController::class)->only(['index','show']);
-    Route::post('orders/{order}/attach',[OrderController::class,'attach']);
-    Route::post('orders/{order}/attach-from-provider',[OrderController::class,'attachFromProvider']);
-    Route::post('orders/{order}/cancel',[OrderController::class,'cancel']);
-    Route::post('orders/{order}/complete',[OrderController::class,'complete']);
+    Route::apiResource('orders', OrderController::class)->only(['index', 'show']);
+    Route::post('orders/{order}/attach', [OrderController::class, 'attach']);
+    Route::post('orders/{order}/attach-from-provider', [OrderController::class, 'attachFromProvider']);
+    Route::post('orders/{order}/cancel', [OrderController::class, 'cancel']);
+    Route::post('orders/{order}/complete', [OrderController::class, 'complete']);
 
     //notifications
+    Route::apiResource('notifications', NotificationController::class)->only(['index', 'show']);
 
-    Route::apiResource('notifications',NotificationController::class)->only(['index','show']);
-
+    Route::group(['prefix' => 'profile', 'controller' => ProfileController::class], function () {
+        Route::get('has-shift', 'hasShift');
+    });
 
 });
