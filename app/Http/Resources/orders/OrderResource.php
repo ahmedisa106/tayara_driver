@@ -31,7 +31,7 @@ class OrderResource extends JsonResource
             'attached' => (bool)$this->driver_attached_order,
             'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
             'completed' => (bool)(int)$this->status->value == OrderStatus::Complete->value,
-            'cancelled' => (bool)$this->status->value == OrderStatus::Cancelled->value,
+            'cancelled' => (bool)(int)$this->status->value == OrderStatus::Cancelled->value,
         ];
     }
 }
