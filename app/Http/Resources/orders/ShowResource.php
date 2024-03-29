@@ -32,7 +32,7 @@ class ShowResource extends JsonResource
             'details' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
             'attached' => (bool)$this->driver_attached_order,
-            'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
+            'attached_from_branch' => (bool)$this->driver_attached_order_from_provider,
             'completed' => $this->status == OrderStatus::Complete,
             'cancelled' => $this->status == OrderStatus::Cancelled,
             'customer' => new CustomerResource($this->customer),
