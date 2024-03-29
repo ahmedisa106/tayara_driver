@@ -14,7 +14,7 @@ class ProfileController extends Controller
     {
         return $this->final_response(data: [
             'unread_notifications_count' => auth()->user()->unreadNotifications->count(),
-            'has_shift' => (bool)auth()->user()->currentShift()
+            'has_shift' => (bool)auth()->user()->currentShift()->first()
         ]);
     }
 }
