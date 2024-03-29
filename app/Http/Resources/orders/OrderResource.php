@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\orders;
 
+use App\Enums\OrderStatus;
 use App\Http\Resources\AddressResource;
 use App\Http\Resources\BranchResource;
 use App\Http\Resources\CustomerResource;
@@ -27,6 +28,10 @@ class OrderResource extends JsonResource
             'provider_id' => $this->provider_id,
             'provider_name' => $this->provider?->name ?? null,
             'provider_image' => $this->provider ? getFile($this->provider->image) : null,
+            'attached' => (bool)$this->driver_attached_order,
+            'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
+            'completed' => (bool)OrderStatus::Complete,
+            'cancelled' => (bool)OrderStatus::Cancelled,
         ];
     }
 }

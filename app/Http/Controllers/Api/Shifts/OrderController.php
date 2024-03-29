@@ -18,7 +18,6 @@ class OrderController extends Controller
     {
         $orders = auth()->user()->orders()
             ->with('products:id')
-
             ->when($request->type != '', function ($query) use ($request) {
                 if ($request->type == 'current') {
                     $query->where(function ($query) {
@@ -39,11 +38,12 @@ class OrderController extends Controller
                 'note',
                 'status',
                 'created_at',
-                'provider_id'
+                'provider_id',
+                'driver_attached_order',
+                'driver_attached_order_from_provider',
             ])
             ->withCount('products as products_count')
             ->latest()
-
             ->paginate();
 
         return $this->success($orders, OrderResource::class);
@@ -52,7 +52,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(
-            [   'products:id,name,image',
+            ['products:id,name,image',
                 'customer:id,name,phone,second_phone',
                 'address:id,address,bookmark,lat,long,city_id' => [
                     'city:id,name'
