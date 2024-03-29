@@ -30,7 +30,7 @@ class OrderResource extends JsonResource
             'provider_image' => $this->provider ? getFile($this->provider->image) : null,
             'attached' => (bool)$this->driver_attached_order,
             'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
-            'completed' => (bool)$this->status->value == OrderStatus::Complete->value,
+            'completed' => (bool)(int)$this->status->value == OrderStatus::Complete->value,
             'cancelled' => (bool)$this->status->value == OrderStatus::Cancelled->value,
         ];
     }
