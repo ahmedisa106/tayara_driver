@@ -52,7 +52,8 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load(
-            ['products:id,name,image',
+            [
+                'products:id,name,image',
                 'customer:id,name,phone,second_phone',
                 'address:id,address,bookmark,lat,long,city_id' => [
                     'city:id,name'
