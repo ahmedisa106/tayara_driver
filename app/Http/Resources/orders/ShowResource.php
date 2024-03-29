@@ -31,14 +31,14 @@ class ShowResource extends JsonResource
             'status' => $this->status->toString(),
             'details' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
-            'customer' => new CustomerResource($this->customer),
-            'address' => new AddressResource($this->address),
-            'branch' => new BranchResource($this->branch),
-            'products' => null,
             'attached' => (bool)$this->driver_attached_order,
             'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
             'completed' => $this->status == OrderStatus::Complete,
             'cancelled' => $this->status == OrderStatus::Cancelled,
+            'customer' => new CustomerResource($this->customer),
+            'address' => new AddressResource($this->address),
+            'branch' => new BranchResource($this->branch),
+            'products' => null,
         ];
 
         if ($this->products_count > 0) {
