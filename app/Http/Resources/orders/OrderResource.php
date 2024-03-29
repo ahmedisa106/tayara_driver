@@ -18,7 +18,6 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        dd($this->status->value, $this->status, OrderStatus::Complete, OrderStatus::Complete->value);
         return [
             'id' => $this->id,
             'order_code' => $this->order_code,
@@ -31,8 +30,8 @@ class OrderResource extends JsonResource
             'provider_image' => $this->provider ? getFile($this->provider->image) : null,
             'attached' => (bool)$this->driver_attached_order,
             'attached_from_provider' => (bool)$this->driver_attached_order_from_provider,
-            'completed' => (bool)(int)$this->status->value == OrderStatus::Complete->value,
-            'cancelled' => (bool)(int)$this->status->value == OrderStatus::Cancelled->value,
+            'completed' => $this->status == OrderStatus::Complete,
+            'cancelled' => $this->status == OrderStatus::Cancelled,
         ];
     }
 }
