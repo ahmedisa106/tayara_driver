@@ -18,6 +18,7 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        dd($this->status->value, $this->status, OrderStatus::Complete, OrderStatus::Complete->value);
         return [
             'id' => $this->id,
             'order_code' => $this->order_code,
