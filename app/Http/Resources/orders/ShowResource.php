@@ -27,7 +27,7 @@ class ShowResource extends JsonResource
             'products_count' => $this->products_count,
             'subtotal' => $this->subtotal,
             'delivery_fee' => $this->delivery_fee,
-            'total' => $this->total,
+            'total' => $this->subtotal + $this->total,
             'status' => $this->status->toString(),
             'details' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
