@@ -16,7 +16,7 @@ class AddressResource extends JsonResource
     {
         return [
             'city_name' => $this->city?->name,
-            'address' => $this->address,
+            'address' => $this->city?->name . ' - ' . $this->address . !is_null($this->bookmark) ? ' - ' . $this->bookmark : "",
             'bookmark' => $this->bookmark,
             'lat' => $this->lat,
             'long' => $this->long,
