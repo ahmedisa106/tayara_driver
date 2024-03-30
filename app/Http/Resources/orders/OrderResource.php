@@ -22,7 +22,7 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'order_code' => $this->order_code,
             'products_count' => $this->products_count ?? 0,
-            'subtotal' => !is_null($this->provider_id) ? (double)$this->subtotal : (double)$this->total,
+            'subtotal' => $this->subtotal,
             'status' => $this->status->toString(),
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
             'provider_id' => $this->provider_id,
