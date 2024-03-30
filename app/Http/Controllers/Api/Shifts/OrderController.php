@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Shifts;
 
 use App\Enums\OrderStatus;
+use App\Events\NewOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\orders\OrderResource;
 use App\Http\Resources\orders\ShowResource;
+use App\Jobs\NewNotification;
 use App\Models\Order;
 use App\Traits\response;
 use Illuminate\Http\Request;

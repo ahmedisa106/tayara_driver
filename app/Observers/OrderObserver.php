@@ -7,6 +7,7 @@ use App\Models\{
     Admin,
     Order,
 };
+use App\Jobs\NewNotification;
 use App\Notifications\NewOrder;
 use App\Services\Fcm\Fcm;
 use App\Services\System\SendNotificationToSystem;
@@ -30,11 +31,11 @@ class OrderObserver
 
             $provider_ratio = $order->provider?->contract_ratio;
 
-            $provider_salary = $order->subtotal -  (($provider_ratio / 100) * $order->subtotal);
+            $provider_salary = $order->subtotal - (($provider_ratio / 100) * $order->subtotal);
 
-            $order->driver_ratio  = $driver_salary;
+            $order->driver_ratio = $driver_salary;
             $order->provider_ratio = $provider_salary;
-            $order->net_price  = ($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);
+            $order->net_price = ($order->delivery_fee - $driver_salary) + ($provider_ratio ? ($order->subtotal - $provider_salary) : 0);
         }
 
         if (
@@ -42,9 +43,9 @@ class OrderObserver
             &&
             $order->status->value == OrderStatus::Cancelled->value
         ) {
-            $order->driver_ratio  = 0;
+            $order->driver_ratio = 0;
             $order->provider_ratio = 0;
-            $order->net_price  = 0;
+            $order->net_price = 0;
         }
     }
 
@@ -72,7 +73,8 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            SendNotificationToSystem::send($adminNotification);
+            dispatch(new NewNotification($adminNotification));
+
         }
 
         // when order cancelled
@@ -81,7 +83,7 @@ class OrderObserver
             &&
             $order->status->value == OrderStatus::Cancelled->value
         ) {
-            $adminNotification =  [
+            $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'body' => "تم إلغاء الطلب رقم " . $order->order_code,
                 'icon' => $icon,
@@ -109,7 +111,8 @@ class OrderObserver
                 message: $customer_notification['body']
             );
 
-            SendNotificationToSystem::send($adminNotification);
+            dispatch(new NewNotification($adminNotification));
+
         }
 
         // when order Attached
@@ -130,7 +133,7 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            SendNotificationToSystem::send($adminNotification);
+            dispatch(new NewNotification($adminNotification));
         }
 
         // when order Attached from Provider
@@ -168,7 +171,7 @@ class OrderObserver
                 $customer_notification['body']
             );
 
-            SendNotificationToSystem::send($adminNotification);
+            dispatch(new NewNotification($adminNotification));
         }
     }
 }
