@@ -59,8 +59,9 @@ class OrderController extends Controller
                 'address:id,address,bookmark,lat,long,city_id' => [
                     'city:id,name'
                 ],
-                'branch:id,provider_id,name,address,lat,long' => [
-                    'provider:id,name,image'
+                'branch:id,provider_id,name,address,lat,long,city_id' => [
+                    'provider:id,name,image',
+                    'city:id,name'
                 ]
             ]
         )
