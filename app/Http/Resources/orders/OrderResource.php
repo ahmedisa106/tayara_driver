@@ -21,7 +21,7 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'order_code' => $this->order_code,
-            'products_count' => (int)$this->products_count ?? 0,
+            'products_count' => $this->products_count ?? 0,
             'subtotal' => !is_null($this->provider_id) ? $this->subtotal : $this->total,
             'status' => $this->status->toString(),
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
