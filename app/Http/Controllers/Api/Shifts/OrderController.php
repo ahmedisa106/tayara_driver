@@ -34,6 +34,7 @@ class OrderController extends Controller
             ->select([
                 'id',
                 'subtotal',
+                'total',
                 'order_code',
                 'note',
                 'status',
