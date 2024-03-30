@@ -30,7 +30,7 @@ class ShowResource extends JsonResource
             'total' => !is_null($this->provider_id) ? $this->total : (string)($this->delivery_fee + $this->total),
             'status' => $this->status->toString(),
             'details' => $this->note,
-            'created_at' => $this->created_at->format('Y-m-d H:i A'),
+            'created_at' => $this->created_at->isoFormat('dddd LL hh:mm A'),
             'attached' => (bool)$this->driver_attached_order,
             'attached_from_branch' => (bool)$this->driver_attached_order_from_provider,
             'completed' => $this->status == OrderStatus::Complete,

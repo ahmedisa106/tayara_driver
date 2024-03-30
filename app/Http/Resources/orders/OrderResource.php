@@ -24,7 +24,7 @@ class OrderResource extends JsonResource
             'products_count' => $this->products_count ?? 0,
             'subtotal' => !is_null($this->provider_id) ? $this->subtotal : $this->total,
             'status' => $this->status->toString(),
-            'created_at' => $this->created_at->format('Y-m-d H:i A'),
+            'created_at' => $this->created_at->isoFormat('dddd LL hh:mm A'),
             'provider_id' => $this->provider_id,
             'provider_name' => $this->provider?->name ?? null,
             'provider_image' => $this->provider ? getFile($this->provider->image) : null,
