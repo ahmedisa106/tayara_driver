@@ -13,6 +13,11 @@ class Branch extends Model
 
     public function provider()
     {
-        return $this->belongsTo(Provider::class,'provider_id');
+        return $this->belongsTo(Provider::class, 'provider_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 }
