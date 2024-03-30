@@ -27,7 +27,7 @@ class ShowResource extends JsonResource
             'products_count' => $this->products_count,
             'subtotal' => !is_null($this->provider_id) ? $this->subtotal : $this->total,
             'delivery_fee' => $this->delivery_fee,
-            'total' => !is_null($this->provider) ? $this->total : ($this->total + $this->delivery_fee),
+            'total' => !is_null($this->provider_id) ? $this->total : ($this->total + $this->delivery_fee),
             'status' => $this->status->toString(),
             'details' => $this->note,
             'created_at' => $this->created_at->format('Y-m-d H:i A'),
