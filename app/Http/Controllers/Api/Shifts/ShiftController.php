@@ -85,6 +85,10 @@ class ShiftController extends Controller
             400,
             'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
 
+        auth('sanctum')->user()->update([
+            'is_in_shift' => true,
+        ]);
+
         $shift = auth('sanctum')->user()->shifts()->create([
             'start_at' => now()
         ]);
@@ -103,6 +107,10 @@ class ShiftController extends Controller
 
         abort_unless(!$shift?->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
 
+        auth('sanctum')->user()->update([
+            'is_in_shift' => false,
+        ]);
+        
         if ($shift) {
             $shift->update(['end_at' => now()]);
         }
