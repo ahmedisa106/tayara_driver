@@ -22,7 +22,7 @@ class ShowResource extends JsonResource
     {
         $data = [
             'id' => $this->id,
-            'order_code' => $this->order_code,
+            'order_code' => sprintf('%07d', $this->order_code),
             'provider_id' => $this->provider_id,
             'products_count' => $this->products_count,
             'subtotal' => !is_null($this->provider_id) ? $this->subtotal : $this->total,
