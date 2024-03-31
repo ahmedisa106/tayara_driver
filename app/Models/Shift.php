@@ -18,6 +18,7 @@ class Shift extends Model
     protected $casts = [
         'start_at' => 'datetime',
         'end_at' => 'datetime',
+        'is_in_shift' => "boolean"
     ];
 
     /**

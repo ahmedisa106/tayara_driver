@@ -24,6 +24,7 @@ class Driver extends Authenticatable
         'phone',
         'status',
         'password',
+        'is_in_shift'
     ];
 
     /**
@@ -42,6 +43,7 @@ class Driver extends Authenticatable
      */
     protected $casts = [
         'password' => 'hashed',
+        'is_in_shift' => "boolean"
     ];
 
     public function shifts()
