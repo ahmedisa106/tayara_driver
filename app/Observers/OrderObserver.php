@@ -49,7 +49,7 @@ class OrderObserver
         }
 
         if (
-            $order->getOriginal('driver_cancelled_order')->value != $order->driver_cancelled_order
+            $order->getOriginal('driver_cancelled_order') != $order->driver_cancelled_order
             &&
             $order->driver_cancelled_order
         ) {
@@ -90,7 +90,7 @@ class OrderObserver
 
         // when order cancelled
         if (
-            $order->getOriginal('driver_cancelled_order')->value != $order->driver_cancelled_order
+            $order->getOriginal('driver_cancelled_order') != $order->driver_cancelled_order
             &&
             $order->driver_cancelled_order
         ) {
