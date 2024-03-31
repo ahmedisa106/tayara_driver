@@ -20,7 +20,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'order_code' => sprintf('%07d', $this->order_code),
+            'order_code' => sprintf('%06d', $this->order_code),
             'products_count' => $this->products_count ?? 0,
             'subtotal' => !is_null($this->provider_id) ? $this->subtotal : $this->total,
             'status' => $this->status->toString(),
