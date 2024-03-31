@@ -93,7 +93,7 @@ class OrderController extends Controller
 
     public function cancel(Order $order)
     {
-        $order->update(['status' => OrderStatus::Cancelled->value]);
+        $order->update(['driver_cancelled_order' => true]);
 
         return $this->final_response(message: "تم إلغاء الطلب بنجاح",);
     }

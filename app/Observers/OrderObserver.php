@@ -47,6 +47,17 @@ class OrderObserver
             $order->provider_ratio = 0;
             $order->net_price = 0;
         }
+
+        if (
+            $order->getOriginal('driver_cancelled_order')->value != $order->driver_cancelled_order
+            &&
+            $order->driver_cancelled_order
+        ) {
+            $order->driver_id = null;
+            $order->driver_ratio = 0;
+            $order->provider_ratio = 0;
+            $order->net_price = 0;
+        }
     }
 
     public function updated(Order $order): void
@@ -79,9 +90,9 @@ class OrderObserver
 
         // when order cancelled
         if (
-            $order->getOriginal('status')->value != $order->status->value
+            $order->getOriginal('driver_cancelled_order')->value != $order->driver_cancelled_order
             &&
-            $order->status->value == OrderStatus::Cancelled->value
+            $order->driver_cancelled_order
         ) {
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
@@ -95,24 +106,7 @@ class OrderObserver
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
 
-            $customer_notification = [
-                'title' => $order->provider?->name ?? config('app.name'),
-                'body' => "تم إلغاء الطلب",
-                'icon' => $icon,
-                'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'order_id' => $order->id
-            ];
-
-            Notification::send($order->customer, new NewOrder($customer_notification));
-
-            Fcm::sendToTokens(
-                tokens: [$order->customer->notifiable->token],
-                title: $order->provider?->name ?? config('app.name'),
-                message: $customer_notification['body']
-            );
-
             dispatch(new NewNotification($adminNotification));
-
         }
 
         // when order Attached
