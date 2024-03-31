@@ -75,11 +75,11 @@ class OrderObserver
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'order_code' => $order->order_code,
-                'body' => "تم الإنتهاء من الطلب رقم " . $order->order_code,
+                'body' => "تم الإنتهاء من الطلب رقم " . $order->id,
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url('dashboard/orders/' . $order->order_code)
+                'url' => system_url('dashboard/orders/' . $order->id)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -96,12 +96,12 @@ class OrderObserver
         ) {
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
-                'body' => "تم إلغاء الطلب رقم " . $order->order_code,
+                'body' => "تم إلغاء الطلب رقم " . $order->id,
                 'icon' => $icon,
                 'order_code' => $order->order_code,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url('dashboard/orders/' . $order->order_code)
+                'url' => system_url('dashboard/orders/' . $order->id)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -118,11 +118,11 @@ class OrderObserver
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'order_code' => $order->order_code,
-                'body' => "الطيار قام بإستلام  الطلب رقم " . $order->order_code,
+                'body' => "الطيار قام بإستلام  الطلب رقم " . $order->id,
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url('dashboard/orders/' . $order->order_code)
+                'url' => system_url('dashboard/orders/' . $order->id)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
@@ -140,11 +140,11 @@ class OrderObserver
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'order_code' => $order->order_code,
-                'body' => "جاري توصيل الطلب رقم " . $order->order_code,
+                'body' => "جاري توصيل الطلب رقم " . $order->id,
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
-                'url' => system_url('dashboard/orders/' . $order->order_code)
+                'url' => system_url('dashboard/orders/' . $order->id)
             ];
 
             Notification::send(Admin::all(), new NewOrder($adminNotification));
