@@ -28,13 +28,12 @@ class OrderProductResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-
             'price' => (double)$this->pivot->price,
             'currency' => config('app.currency'),
-            'quantity' => $this->pivot->quantity,
+            'quantity' => (int)$this->pivot->quantity,
             'options' => $options,
             'note' => $this->pivot->note,
-            'image' => $this->image ? getFile($this->image)  :null,
+            'image' => $this->image ? getFile($this->image) : null,
         ];
     }
 }

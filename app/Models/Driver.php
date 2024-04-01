@@ -24,7 +24,10 @@ class Driver extends Authenticatable
         'phone',
         'status',
         'password',
-        'is_in_shift'
+        'is_in_shift',
+        'lat',
+        'long',
+        'location_updated_at'
     ];
 
     /**

@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::group(['prefix' => 'profile', 'controller' => ProfileController::class], function () {
         Route::get('has-shift', 'hasShift');
+        Route::put('update-location', 'updateLocation');
     });
 
 });
