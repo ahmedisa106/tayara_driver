@@ -24,7 +24,7 @@ class ShowResource extends JsonResource
             'id' => $this->id,
             'order_code' => sprintf('%06d', $this->order_code),
             'provider_id' => $this->provider_id,
-            'products_count' => $this->products_count,
+            'products_count' => (int)$this->products_count,
             'subtotal' => !is_null($this->provider_id) ? (double)$this->subtotal : (double)$this->total,
             'delivery_fee' => (double)$this->delivery_fee,
             'total' => !is_null($this->provider_id) ? (double)$this->total : (double)($this->delivery_fee + $this->total),
