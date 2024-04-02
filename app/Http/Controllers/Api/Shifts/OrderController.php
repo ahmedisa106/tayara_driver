@@ -54,19 +54,19 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $order->load(
-            [
-                'products:id,name,image',
-                'customer:id,name,phone,second_phone',
-                'address:id,address,bookmark,lat,long,city_id' => [
-                    'city:id,name'
-                ],
-                'branch:id,provider_id,name,address,lat,long,city_id' => [
-                    'provider:id,name,image',
-                    'city:id,name'
-                ]
+        $order->load([
+            'products:id,name,image',
+            'customer:id,name,phone,second_phone',
+            
+            'address:id,address,bookmark,lat,long,city_id' => [
+                'city:id,name'
+            ],
+
+            'branch:id,provider_id,name,address,lat,long,city_id' => [
+                'provider:id,name,image',
+                'city:id,name'
             ]
-        )
+        ])
             ->loadCount('products as products_count');
 
         return $this->final_response(data: new ShowResource($order));
@@ -90,10 +90,12 @@ class OrderController extends Controller
         return $this->final_response(message: "تم إستلام الطلب من الفرع بنجاح");
     }
 
-
     public function cancel(Order $order)
     {
-        $order->update(['driver_cancelled_order' => true]);
+        $order->update([
+            'driver_cancelled_order' => true,
+            'driver_id' => null
+        ]);
 
         return $this->final_response(message: "تم إلغاء الطلب بنجاح",);
     }
