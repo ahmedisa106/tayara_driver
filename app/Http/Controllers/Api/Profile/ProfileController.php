@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Traits\response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -19,9 +21,24 @@ class ProfileController extends Controller
         ]);
     }
 
+    public function profile(ProfileRequest $request)
+    {
+        auth()->user()->update($request->validated());
+
+        return $this->final_response();
+    }
+
     public function updateLocation(UpdateLocationRequest $request)
     {
         auth()->user()->update($request->validated() + ['location_updated_at' => now()]);
+
+        return $this->final_response();
+    }
+
+    public function deleteAccount()
+    {
+        auth()->user()->tokens()->delete();
+        auth()->user()->delete();
 
         return $this->final_response();
     }
