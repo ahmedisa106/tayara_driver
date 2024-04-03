@@ -18,8 +18,7 @@ class DriverResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
-            'unread_notifications_count' => auth()->user()->unreadNotifications()->count(),
-            'has_shift' => (bool)$this->currentShift()->first()
+            'image' => $this->image ? system_url('storage/uploads/' . $this->image) : null
         ];
     }
 }
