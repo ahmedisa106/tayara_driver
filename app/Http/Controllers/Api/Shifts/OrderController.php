@@ -57,7 +57,7 @@ class OrderController extends Controller
         $order->load([
             'products:id,name,image',
             'customer:id,name,phone,second_phone',
-            
+
             'address:id,address,bookmark,lat,long,city_id' => [
                 'city:id,name'
             ],
