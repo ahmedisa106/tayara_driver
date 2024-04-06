@@ -33,7 +33,7 @@ class ProfileController extends Controller
     {
         auth()->user()->update($request->validated() + ['location_updated_at' => now()]);
 
-        return $this->final_response();
+        return $this->final_response('تم تحديث البيانات بنجاح');
     }
 
     public function updatePassword(ChangePasswordRequest $request)
