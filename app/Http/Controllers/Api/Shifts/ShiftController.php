@@ -129,15 +129,17 @@ class ShiftController extends Controller
         $shift = auth()->user()->shifts()
             ->whereNotNull('end_at')
             ->latest()
-            ->first()?->load('orders')
+            ->first();
+
+        if (!$shift) {
+            return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
+        }
+        
+        $shift->load('orders')
             ->loadCount('orders')
             ->loadSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
             }], 'driver_ratio');
-
-        if ($shift->doesntExist()) {
-            return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
-        }
 
         return $this->final_response(data: new ShiftResource($shift));
     }
