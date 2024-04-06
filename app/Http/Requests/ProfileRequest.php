@@ -30,7 +30,7 @@ class ProfileRequest extends FormRequest
         return [
             'name' => 'required|string|max:150',
             'phone' => ['required', 'numeric', 'starts_with:010,012,015,011', 'max_digits:15',
-                Rule::unique('drivers', 'phone')->whereNotNull('deleted_at')->ignore(request()->user()->id)
+                Rule::unique('drivers', 'phone')->whereNull('deleted_at')->ignore(request()->user()->id)
             ],
             'image' => ['nullable', Rule::imageFile()->max('1mb')->extensions(['png', 'jpg', 'jpeg', 'webp'])],
         ];
