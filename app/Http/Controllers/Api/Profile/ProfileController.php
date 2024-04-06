@@ -26,7 +26,7 @@ class ProfileController extends Controller
     {
         auth()->user()->update($request->validated());
 
-        return $this->final_response();
+        return $this->final_response('تم تحديث البيانات بنجاح');
     }
 
     public function updateLocation(UpdateLocationRequest $request)
