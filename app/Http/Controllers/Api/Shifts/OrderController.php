@@ -39,6 +39,7 @@ class OrderController extends Controller
                 'total',
                 'order_code',
                 'note',
+                'delivery_fee',
                 'status',
                 'created_at',
                 'provider_id',

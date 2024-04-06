@@ -8,6 +8,7 @@ use App\Http\Resources\BranchResource;
 use App\Http\Resources\CustomerResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Str;
 
 class OrderResource extends JsonResource
 {
@@ -33,6 +34,8 @@ class OrderResource extends JsonResource
             'completed' => $this->status == OrderStatus::Complete,
             'cancelled' => $this->status == OrderStatus::Cancelled,
             'product_image' => $this->image ? getFile($this->image) : null,
+            'details' => Str::limit($this->note, 50),
+            'delivery_fee' => (double)$this->delivery_fee
         ];
     }
 }
