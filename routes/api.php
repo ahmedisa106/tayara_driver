@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::put('update-location', 'updateLocation');
         Route::put('profile', 'profile');
         Route::delete('delete-account', 'deleteAccount');
+
+        Route::put('update-password', 'updatePassword');
     });
 
 });

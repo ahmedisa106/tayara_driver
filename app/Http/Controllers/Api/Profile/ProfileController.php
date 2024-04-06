@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Traits\response;
@@ -33,6 +34,15 @@ class ProfileController extends Controller
         auth()->user()->update($request->validated() + ['location_updated_at' => now()]);
 
         return $this->final_response();
+    }
+
+    public function updatePassword(ChangePasswordRequest $request)
+    {
+        auth()->user()->update([
+            'password' => $request->validated('password')
+        ]);
+
+        return $this->final_response(message: "تم تحديث كلمة المرور بنجاح");
     }
 
     public function deleteAccount()

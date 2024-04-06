@@ -39,6 +39,7 @@ class ShowResource extends JsonResource
             'address' => new AddressResource($this->address),
             'branch' => new BranchResource($this->branch),
             'products' => null,
+            'product_image' => $this->image ? getFile($this->image) : null,
         ];
 
         if ($this->products_count > 0) {
