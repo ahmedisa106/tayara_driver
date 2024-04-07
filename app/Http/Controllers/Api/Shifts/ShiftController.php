@@ -44,7 +44,7 @@ class ShiftController extends Controller
      */
     public function show(Shift $shift): JsonResponse
     {
-        dd(auth()->id(), auth()->user()->id);
+
         $shift->where('driver_id', auth()->id())
             ->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
             ->withCount(['orders' => fn($q) => $q->whereStatus(OrderStatus::Complete)])
@@ -52,6 +52,7 @@ class ShiftController extends Controller
                 $builder->where('status', OrderStatus::Complete);
             }], 'driver_ratio');
 
+        dd($shift);
         return $this->final_response(data: new ShiftResource($shift));
     }
 
