@@ -134,9 +134,9 @@ class ShiftController extends Controller
         if (!$shift) {
             return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
         }
-        
-        $shift->load('orders')
-            ->loadCount('orders')
+
+        $shift->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
+            ->loadCount('orders', fn($q) => $q->whereStatus(OrderStatus::Complete))
             ->loadSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
             }], 'driver_ratio');
