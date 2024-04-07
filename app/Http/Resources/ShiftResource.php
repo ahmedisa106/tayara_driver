@@ -15,14 +15,14 @@ class ShiftResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        dd($this->orders);
+        dd($this->whenRelationLoaded('orders', fn() => OrderResource::collection($this->orders)));
         return [
             'id' => $this->id,
             'start_at' => $this->start_at->isoFormat('dddd LL hh:mm A'),
             'end_at' => $this->end_at?->isoFormat('dddd LL hh:mm A'),
             'total' => (double)$this->orders_sum_driver_ratio ?? 0,
             'total_orders' => (int)$this->orders_count,
-            'orders' => $this->whenLoaded('orders', fn() => OrderResource::collection($this->orders)),
+            'orders' => $this->whenRelationLoaded('orders', fn() => OrderResource::collection($this->orders)),
         ];
     }
 }
