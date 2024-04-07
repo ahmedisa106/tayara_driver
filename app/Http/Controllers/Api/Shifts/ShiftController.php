@@ -48,7 +48,6 @@ class ShiftController extends Controller
             ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'driver_ratio')
             ->loadCount(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
-        dd($shift);
         return $this->final_response(data: new ShiftResource($shift));
     }
 
@@ -63,7 +62,7 @@ class ShiftController extends Controller
             ->withSum(['orders' => function ($q) {
                 $q->where('status', OrderStatus::Complete);
             }], 'driver_ratio')
-            ->withCount('orders as orders_count');
+            ->withCount(['orders as orders_count' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
         if ($shift->doesntExist()) {
             return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
