@@ -46,7 +46,7 @@ class ShiftController extends Controller
     {
 
         $shift->where('driver_id', auth()->id())
-            ->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
+            ->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Complete))
             ->withCount(['orders' => fn($q) => $q->whereStatus(OrderStatus::Complete)])
             ->withSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
