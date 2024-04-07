@@ -45,8 +45,11 @@ class ShiftController extends Controller
     public function show(Shift $shift): JsonResponse
     {
         $shift->load(['orders' => function ($q) {
-            $q->where('status', OrderStatus::Complete);
+            $q->where('status', OrderStatus::Complete)
+                ->sum('driver_ratio')
+                ->count('id');
         }]);
+
 
         dd($shift);
         return $this->final_response(data: new ShiftResource($shift));
