@@ -31,7 +31,7 @@ class OrderProductResource extends JsonResource
             'price' => (double)$this->pivot->price,
             'currency' => config('app.currency'),
             'quantity' => (int)$this->pivot->quantity,
-            'options' => $options,
+            'options' => !empty($options) ? $options : null,
             'note' => $this->pivot->note,
             'image' => $this->image ? getFile($this->image) : null,
         ];
