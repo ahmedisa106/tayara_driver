@@ -15,6 +15,7 @@ class ShiftResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        dd($this->orders);
         return [
             'id' => $this->id,
             'start_at' => $this->start_at->isoFormat('dddd LL hh:mm A'),
