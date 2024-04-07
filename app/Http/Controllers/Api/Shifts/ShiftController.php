@@ -44,7 +44,8 @@ class ShiftController extends Controller
      */
     public function show(Shift $shift): JsonResponse
     {
-        $shift->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
+        $shift->where('driver_id', auth()->id())
+            ->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
             ->loadCount('orders', fn($q) => $q->whereStatus(OrderStatus::Complete))
             ->loadSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
