@@ -34,7 +34,7 @@ class OrderResource extends JsonResource
             'completed' => $this->status == OrderStatus::Complete,
             'cancelled' => $this->status == OrderStatus::Cancelled,
             'product_image' => $this->image ? getFile($this->image) : null,
-            'details' => Str::limit($this->note, 50),
+            'details' => Str::limit($this->note, 50) ?? "",
             'delivery_fee' => (double)$this->delivery_fee
         ];
     }
