@@ -44,10 +44,11 @@ class ShiftController extends Controller
      */
     public function show(Shift $shift): JsonResponse
     {
-        $shift->load(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)->withCount('products as products_count')])
+        $shift->load(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)
+            ->withCount('products as products_count')])
             ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'driver_ratio')
             ->loadCount(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)]);
-        
+
         return $this->final_response(data: new ShiftResource($shift));
     }
 
@@ -83,14 +84,11 @@ class ShiftController extends Controller
             400,
             'لا يمكنمك بدأ وردية عمل جديدة حتي تنهي أخر وردية');
 
-
         auth('sanctum')->user()->update([
             'is_in_shift' => 1,
         ]);
 
-        $shift = auth('sanctum')->user()->shifts()->create([
-            'start_at' => now()
-        ]);
+        $shift = auth('sanctum')->user()->shifts()->create(['start_at' => now()]);
 
         return $this->final_response(message: "تم بدأ الوردية بنجاح", data: new ShiftResource($shift));
     }
@@ -110,9 +108,7 @@ class ShiftController extends Controller
             $shift->update(['end_at' => now()]);
         }
 
-        auth('sanctum')->user()->update([
-            'is_in_shift' => false,
-        ]);
+        auth('sanctum')->user()->update(['is_in_shift' => false,]);
 
         return $this->final_response(message: "تم إنهاء الوردية بنجاح");
     }
@@ -133,11 +129,10 @@ class ShiftController extends Controller
             return $this->final_response(success: false, message: "لا يوجد اي ورديات متااحة الأن", code: 404);
         }
 
-        $shift->withWhereHas('orders', fn($q) => $q->whereStatus(OrderStatus::Cancelled))
-            ->withCount('orders', fn($q) => $q->whereStatus(OrderStatus::Complete))
-            ->withSum(['orders' => function (Builder $builder) {
-                $builder->where('status', OrderStatus::Complete);
-            }], 'driver_ratio');
+        $shift->load(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)
+            ->withCount('products as products_count')])
+            ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'driver_ratio')
+            ->loadCount(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
         return $this->final_response(data: new ShiftResource($shift));
     }
