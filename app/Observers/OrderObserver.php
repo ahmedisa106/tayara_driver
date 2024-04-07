@@ -96,7 +96,7 @@ class OrderObserver
         ) {
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
-                'body' => "تم إلغاء الطلب رقم " . $order->id,
+                'body' => "تم إلغاء الطلب رقم " . $order->order_code,
                 'icon' => $icon,
                 'order_code' => $order->order_code,
                 'order_id' => $order->id,
@@ -118,7 +118,7 @@ class OrderObserver
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'order_code' => $order->order_code,
-                'body' => "الطيار قام بإستلام  الطلب رقم " . $order->id,
+                'body' => "الطيار قام بإستلام  الطلب رقم " . $order->order_code,
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
@@ -140,7 +140,7 @@ class OrderObserver
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'order_code' => $order->order_code,
-                'body' => "جاري توصيل الطلب رقم " . $order->id,
+                'body' => "جاري توصيل الطلب رقم " . $order->order_code,
                 'icon' => $icon,
                 'order_id' => $order->id,
                 'created_at' => $order->created_at->isoFormat('dddd  hh:mm a'),
