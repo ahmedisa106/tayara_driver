@@ -48,7 +48,8 @@ class ShiftController extends Controller
             $q->where('status', OrderStatus::Complete)
                 ->withCount('orders')
                 ->withSum('orders', 'driver_ratio');
-        })->where('driver_id', auth()->id());
+        })
+            ->where('driver_id', auth()->user()->id());
 
         dd($shift, 'sad');
         return $this->final_response(data: new ShiftResource($shift));
