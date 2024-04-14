@@ -23,11 +23,11 @@ class ShiftController extends Controller
     public function index(): JsonResponse
     {
         $shifts = Shift::whereBelongsTo(auth()->user())
-            ->select('id', 'start_at', 'end_at')
+            ->select('id', 'start_at', 'end_at', 'driver_salary', 'custody')
             ->whereNotNull('end_at')
             ->withSum(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
-            }], 'driver_ratio')
+            }], 'delivery_fee')
             ->withCount(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
             }])
@@ -46,7 +46,7 @@ class ShiftController extends Controller
     {
         $shift->load(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)
             ->withCount('products as products_count')])
-            ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'driver_ratio')
+            ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'delivery_fee')
             ->loadCount(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
         return $this->final_response(data: new ShiftResource($shift));
