@@ -89,11 +89,7 @@ class OrderObserver
         }
 
         // when order cancelled
-        if (
-            $order->getOriginal('driver_cancelled_order') != $order->driver_cancelled_order
-            &&
-            $order->driver_cancelled_order
-        ) {
+        if ($order->driver_cancelled_order) {
             $adminNotification = [
                 'title' => "رسالة من " . auth()->user()->name,
                 'body' => "تم إلغاء الطلب رقم " . $order->order_code,
