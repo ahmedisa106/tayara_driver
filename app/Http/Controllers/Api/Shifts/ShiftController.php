@@ -33,7 +33,8 @@ class ShiftController extends Controller
                 $builder->where('status', OrderStatus::Complete);
             }])
             ->when(\request('date'), function ($q) {
-                $q->whereDate('start_at', request('date'));
+                $q->whereDate('start_at', request('date'))
+                    ->orWhereDate('end_at', request('date'));
             })
             ->latest()
             ->paginate(request()->limit);
