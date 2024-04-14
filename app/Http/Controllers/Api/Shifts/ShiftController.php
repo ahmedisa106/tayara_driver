@@ -140,7 +140,7 @@ class ShiftController extends Controller
 
         $shift->load(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)
             ->withCount('products as products_count')])
-            ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'driver_ratio')
+            ->loadSum(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)], 'delivery_fee')
             ->loadCount(['orders' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
         return $this->final_response(data: new ShiftResource($shift));
