@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Enums\OrderStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DriverResource;
 use App\Models\Driver;
@@ -48,6 +49,14 @@ class AuthController extends Controller
 
     public function logout(Driver $driver)
     {
+        $shift = auth()->user()->currentShift()?->first();
+        
+        if ($shift) {
+            if ($shift->orders()->where('status', '!=', OrderStatus::Complete)->where('status', '!=', OrderStatus::Cancelled)->count() > 0) {
+                return $this->final_response(success: false, message: "لا يمكنك إنهاء الوردية وهناك طلبات قيد التنفيذ", code: 400);
+            }
+        }
+
         auth('sanctum')->user()->currentAccessToken()->delete();
 
         return $this->final_response(message: "تم تسجيل الخروج بنجاح");

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ShiftResource;
 use App\Models\Shift;
 use App\Traits\response;
+use Carbon\Carbon;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -31,6 +32,9 @@ class ShiftController extends Controller
             ->withCount(['orders' => function (Builder $builder) {
                 $builder->where('status', OrderStatus::Complete);
             }])
+            ->when(\request('date'), function ($q) {
+                $q->whereDate('start_at', '>=', request('date'));
+            })
             ->latest()
             ->paginate(request()->limit);
 
@@ -105,6 +109,10 @@ class ShiftController extends Controller
         abort_unless(!$shift?->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
 
         if ($shift) {
+            if ($shift->orders()->where('status', '!=', OrderStatus::Complete)->where('status', '!=', OrderStatus::Cancelled)->count() > 0) {
+                return $this->final_response(success: false, message: "لا يمكنك إنهاء الوردية وهناك طلبات قيد التنفيذ", code: 400);
+            }
+            
             $shift->update(['end_at' => now()]);
         }
 
