@@ -109,10 +109,11 @@ class ShiftController extends Controller
         abort_unless(!$shift?->end_at != null, 400, 'تم الإنتهاء من الوردية من قبل');
 
         if ($shift) {
+            dd($shift->orders);
             if ($shift->orders()->where('status', '!=', OrderStatus::Complete)->where('status', '!=', OrderStatus::Cancelled)->count() > 0) {
                 return $this->final_response(success: false, message: "لا يمكنك إنهاء الوردية وهناك طلبات قيد التنفيذ", code: 400);
             }
-            
+
             $shift->update(['end_at' => now()]);
         }
 
