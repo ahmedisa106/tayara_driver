@@ -67,7 +67,7 @@ class ShiftController extends Controller
         $shift = auth()->user()->currentShift()
             ->withSum(['orders' => function ($q) {
                 $q->where('status', OrderStatus::Complete);
-            }], 'driver_ratio')
+            }], 'delivery_fee')
             ->withCount(['orders as orders_count' => fn($q) => $q->where('status', OrderStatus::Complete)]);
 
         if ($shift->doesntExist()) {
