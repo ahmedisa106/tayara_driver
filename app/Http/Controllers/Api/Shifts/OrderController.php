@@ -95,7 +95,8 @@ class OrderController extends Controller
     {
         $order->update([
             'driver_cancelled_order' => true,
-            'driver_id' => null
+            'driver_id' => null,
+            'shift_id' => null
         ]);
 
         return $this->final_response(message: "تم إلغاء الطلب بنجاح",);
