@@ -32,8 +32,7 @@ class OrderController extends Controller
                             ->orWhere('status', OrderStatus::Complete->value);
                     });
                 }
-            })
-            ->select([
+            })->select([
                 'id',
                 'subtotal',
                 'total',
@@ -67,8 +66,7 @@ class OrderController extends Controller
                 'provider:id,name,image',
                 'city:id,name'
             ]
-        ])
-            ->loadCount('products as products_count');
+        ])->loadCount('products as products_count');
 
         return $this->final_response(data: new ShowResource($order));
     }
@@ -93,11 +91,7 @@ class OrderController extends Controller
 
     public function cancel(Order $order)
     {
-        $order->update([
-            'driver_cancelled_order' => true,
-            'driver_id' => null,
-            'shift_id' => null
-        ]);
+        $order->update(['driver_cancelled_order' => true, 'driver_id' => null, 'shift_id' => null]);
 
         return $this->final_response(message: "تم إلغاء الطلب بنجاح",);
     }
