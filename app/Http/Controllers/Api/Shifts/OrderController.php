@@ -44,6 +44,7 @@ class OrderController extends Controller
                 'provider_id',
                 'driver_attached_order',
                 'driver_attached_order_from_provider',
+                'discount'
             ])
             ->withCount('products as products_count')
             ->latest()
