@@ -48,8 +48,9 @@ class ProfileController extends Controller
     public function deleteAccount()
     {
         auth()->user()->tokens()->delete();
+        auth()->user()->shifts()->delete();
         auth()->user()->delete();
 
-        return $this->final_response();
+        return $this->final_response(message: "تم حذف الحساب بنجاح");
     }
 }
